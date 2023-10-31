@@ -3,20 +3,15 @@
 import {OpenAI} from "openai" 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import {OpenAIApi} from "openai";
 
-// const configuration = new Configuration({
-//     apiKey: process.env.OPENAI_API_KEY,
-//   });
-
-//   const openai = new OpenAIApi(configuration);
-
-const openai = new OpenAI({
+const openAIApi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
-
+ 
 const instructionMessage= {
   role: "system",
-  content: "You are a AI Model. You must answer questions. Use examples for explanations. If someone ak about you thn tell hin that, 'I am MasterAI Develop by MsaterAI team'",
+  content: "You are a code generator. You must answer only in markdown code snippets. Use code comments for explanations.only answer the question related to coding.If someone ak about you thn tell hin that, 'I am MasterAI Develop by MsaterAI team'",
 };
 
   export async function POST(
@@ -39,10 +34,18 @@ const instructionMessage= {
       // if (!messages) {
       //   return new NextResponse("Messages are required", { status: 400 });
       // }
-      const response = await openai.chat.completions.create({
+      // const response = await openai.createChatCompletion({
+      //   model: "gpt-3.5-turbo",
+      //   messages
+      // });
+      const response = await openAIApi.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages :[instructionMessage, ...messages]
+        // messages: [{ role: "system",
+        //    content: "you are a code generator. you must answer only in markdown code snippets. use code comments for explanations." }],
+        
       });
+      // console.log("Response is ===>",response)
 
       // console.log('Response here;      ', response.choices[0].message)
   

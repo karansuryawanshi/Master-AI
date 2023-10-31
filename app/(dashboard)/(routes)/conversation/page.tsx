@@ -18,12 +18,17 @@ import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
+import VoiceAssistant from "@/components/voiceAssistant";
+import { constants } from "fs/promises";
+import { Content } from "next/font/google";
+import VolumeUpSharpIcon from '@mui/icons-material/VolumeUpSharp';
+
 
 const ConversationPage = () => {
 
     const router = useRouter();
-
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+    // const { transcript, resetTranscript, startListening, stopListening } = useSpeechRecognition();
 
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,29 +36,47 @@ const ConversationPage = () => {
       prompt: ""
     }
   });
+  
   const isLoading = form.formState.isSubmitting;
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        
-    try {
-        const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
-        const newMessages = [...messages, userMessage];
       
-        const response = await axios.post('/api/conversation', { messages: newMessages });
-        setMessages((current) => [...current, userMessage, response.data]);
-      
-      form.reset();
-      } 
-      catch (error:any) {
-           
+      try {
+          const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
+          const newMessages = [...messages, userMessage];
+          
+          const response = await axios.post('/api/conversation', { messages: newMessages });
+          setMessages((current) => [...current, userMessage, response.data]);
+          
+          form.reset();
+        } 
+        catch (error:any) {
+            
             console.log(error);
         }
         finally{
             router.refresh();
         }
-    }
-  return (
-    // update after bg color
+    }   
+        const NewMessage = messages;
+        const [isSpeaking, setIsSpeaking] = useState(false);
+
+        const speak = (comingText:string) => {
+            console.log(comingText)
+            const text = comingText;
+              if (!isSpeaking) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'hi-IN';
+                window.speechSynthesis.speak(utterance);
+                setIsSpeaking(true);
+              } else {
+                window.speechSynthesis.cancel();
+                setIsSpeaking(false);
+              }
+            }
+
+
+    
+    return (
     <div >
       <Heading
       title = "Conversation"
@@ -66,8 +89,7 @@ const ConversationPage = () => {
         <div>
             <Form {...form}>
                 <form 
-                onSubmit={form.handleSubmit(onSubmit)}
-                // here bg is also set as per my need
+                onSubmit={form.handleSubmit(onSubmit)}                
                 className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2">
                     <FormField
                     name="prompt"
@@ -90,6 +112,7 @@ const ConversationPage = () => {
                 </form>
             </Form>
         </div>
+        
         <div className="space-y-4 mt-4">
             {isLoading &&(
                 <div className="p-8 rounded-lg w-full flex item-center justify-center bg-muted">
@@ -101,27 +124,39 @@ const ConversationPage = () => {
                     <Empty label="No Conversation started"/>
                 </div>
             )}
+                
             <div className="flex flex-col-reverse gap-y-4">
-                {messages.map((message) => (
-                    <div 
-                    key={message.content}
-                    className={cn(
+                {messages.map((message, index, values) => (
+
+                    <div
+                        key={message.content}
+                        className={cn(
                         "p-8 w-full flex item-start gap-x-8 rounded-lg",
                         message.role === "user" ? "bg-white border border-black/10" :
                         "bg-muted"
                         )}
-                    >
+                        >                        
                         {message.role === "user"?<UserAvatar/>:<BotAvatar/>}
-                        <p className="text-sm">
-                            {message.content}
+                        <p>
+                            {message.content} 
                         </p>
+
+                        { message.role != "user" &&
+                        <div 
+                        className="flex flex-end justify-end p-2 m-auto rounded-full lg:text-5xl bg-opacity-0 text-black-500 cursor-pointer duration-300 hover:opacity-70 bg-[#c8e5ff] bg-opacity-50 transition-opacity "
+                        >
+                            <VolumeUpSharpIcon onClick={() => speak(message.content)}/>
+                        </div>
+                        }                        
                     </div>
                 ))}
             </div>
         </div>
       </div>
     </div>
-  )
+  )     
 }
 
 export default ConversationPage;
+
+
