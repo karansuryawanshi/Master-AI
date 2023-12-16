@@ -44,7 +44,7 @@ const instructionMessage= {
         messages :[instructionMessage, ...messages]
       });
 
-      // console.log('Response here;      ', response.choices[0].message)
+      // console.log('Response here;', response.choices[0].message)
   
       return NextResponse.json(response.choices[0].message);
     }

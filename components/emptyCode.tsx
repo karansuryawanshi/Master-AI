@@ -3,7 +3,7 @@ interface EmptyProps {
 }
 import Image from "next/image"
 
-export const EmptyConversation = ({
+export const EmptyCode = ({
     label
 }:EmptyProps) => {
   return (
@@ -12,7 +12,7 @@ export const EmptyConversation = ({
       <Image
         alt = "Empty"
         fill 
-        src = "/empty.png"
+        src = "/emptyCode.png"
         />
       </div>
       <p className="text-muted-foreground text-sm text-center">

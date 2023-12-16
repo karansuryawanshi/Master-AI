@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {Empty} from "@/components/empty"
+import {EmptyConversation} from "@/components/empty"
 import { ChatCompletionRequestMessage }  from "openai";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
@@ -121,7 +121,7 @@ const ConversationPage = () => {
             )}
             {messages.length === 0 && !isLoading && (
                 <div className="item-center justify-center">
-                    <Empty label="No Conversation started"/>
+                    <EmptyConversation label="No Conversation started"/>
                 </div>
             )}
                 

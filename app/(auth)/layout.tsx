@@ -1,3 +1,6 @@
+// import NextNProgress from 'nextjs-progressbar';
+
+
 const AuthLayout = ({
     children
 }:{
@@ -5,7 +8,8 @@ const AuthLayout = ({
 }) => {
   return (
     <div className="flex items-center justify-center h-full">
-      {children}
+      {/* <NextNProgress /> */}
+        {children}
     </div>
   )
 }

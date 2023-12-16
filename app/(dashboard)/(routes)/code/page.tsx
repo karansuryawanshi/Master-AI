@@ -12,14 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {Empty} from "@/components/empty"
+import { EmptyCode } from "@/components/emptyCode";
 import { ChatCompletionRequestMessage }  from "openai";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import ReactMarkdown from 'react-markdown'
-import Markdown from "react-markdown";
+import NextNProgress from 'nextjs-progressbar';
 
 const CodePage = () => {
 
@@ -57,6 +57,7 @@ const CodePage = () => {
   return (
     // update after bg color
     <div>
+        <NextNProgress color="#21fa90"/>
       <Heading
       title = "Code Generation"
       description="Generate code using descriptive code"
@@ -65,12 +66,10 @@ const CodePage = () => {
       bgColor="bg-green-700/10"
       ></Heading>
       <div className="px-4 lg:px-8">
-      {/* <ReactMarkdown>*React-Markdown* is()({ }) **Awesome**</ReactMarkdown> */}
         <div>
             <Form {...form}>
                 <form 
                 onSubmit={form.handleSubmit(onSubmit)}
-                // here bg is also set as per my need
                 className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2">
                     <FormField
                     name="prompt"
@@ -101,7 +100,7 @@ const CodePage = () => {
             )}
             {messages.length === 0 && !isLoading && (
                 <div className="item-center justify-center">
-                    <Empty label="No Conversation started"/>
+                    <EmptyCode label="No Conversation started"/>
                 </div>
             )}
             <div className="flex flex-col-reverse gap-y-4">
@@ -125,8 +124,6 @@ const CodePage = () => {
                                 <code className="bg-black/10 rounded-lg p-1"{...props}/>
                             )
                         }}
-                        // code to toggle 
-                        
                         className="text-sm overflow-hideen leading-7"
                         >
                             {message.content || ""}
