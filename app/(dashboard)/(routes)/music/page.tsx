@@ -74,7 +74,7 @@ const MusicPage = () => {
                                 <Input 
                                     className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent "
                                     disabled={isLoading}
-                                    placeholder="Piono solo"
+                                    placeholder="Piano solo"
                                     {...field}
                                 />
                             </FormControl >

@@ -1,5 +1,7 @@
 import Navbar from "@/components/navbar"
 import Sidebar from "@/components/sidebar";
+import NextNprogress from 'nextjs-progressbar';
+
 
 const dashboardLayout = ({
     children
@@ -15,6 +17,7 @@ const dashboardLayout = ({
             <Sidebar/>
         </div>  
         <main className="md:pl-72 ">
+          {/* <NextNprogress /> */}
             <Navbar/>
             {children}
         </main>

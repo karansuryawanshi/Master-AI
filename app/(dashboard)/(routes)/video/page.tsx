@@ -33,13 +33,13 @@ const VideoPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
       
       try {
-          setVideo(undefined);  
+          setVideo(undefined);
 
           const response = await axios.post('/api/video',values);
           setVideo(response.data[0]);
           
           form.reset();
-        } 
+        }
         catch (error:any) {
             
             console.log(error);

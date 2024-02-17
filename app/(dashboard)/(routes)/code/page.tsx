@@ -20,6 +20,8 @@ import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import ReactMarkdown from 'react-markdown'
 import NextNProgress from 'nextjs-progressbar';
+import { increaseApiLimit, checkApiLimit } from "@/lib/appLimit";
+import { NextResponse } from "next/server";
 
 const CodePage = () => {
 
@@ -40,7 +42,7 @@ const CodePage = () => {
     try {
         const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
         const newMessages = [...messages, userMessage];
-      
+
         const response = await axios.post('/api/code', { messages: newMessages });
         setMessages((current) => [...current, userMessage, response.data]);
       

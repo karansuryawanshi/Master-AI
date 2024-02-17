@@ -18,17 +18,36 @@ import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
-import VoiceAssistant from "@/components/voiceAssistant";
-import { constants } from "fs/promises";
-import { Content } from "next/font/google";
 import VolumeUpSharpIcon from '@mui/icons-material/VolumeUpSharp';
+import 'regenerator-runtime/runtime';
+import SpeechRecognition, {
+    useSpeechRecognition,
+  } from "react-speech-recognition";
+import useClipboard from "react-use-clipboard";
+import {Mike} from "@/components/mike"
+import { Icon } from '@iconify/react';
+import { Transcriptions } from "openai/resources/audio/transcriptions.mjs";
 
+import { incrementApiLimit, checkApiLimit } from "@/lib/appLimit";
+import { NextResponse } from "next/server";
 
 const ConversationPage = () => {
 
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
-    // const { transcript, resetTranscript, startListening, stopListening } = useSpeechRecognition();
+    const [isListening, setIsListening] = useState(false);
+
+    const mike = () =>{
+      if (!isListening) {
+          SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
+          setIsListening(true);
+          } 
+          else{
+            SpeechRecognition.stopListening(); 
+            setIsListening(false);
+          }
+        }
+    const { transcript, stopSpeechRecognition, listening } = useSpeechRecognition();
 
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,22 +59,20 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
       
-      try {
+      const freeTrial = await checkApiLimit()
+      if(!freeTrial){
+          return new NextResponse("Free Trial Has Expired",{status:403})
+      }
+    
           const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
           const newMessages = [...messages, userMessage];
           
           const response = await axios.post('/api/conversation', { messages: newMessages });
           setMessages((current) => [...current, userMessage, response.data]);
-          
+            console.log(response)
           form.reset();
-        } 
-        catch (error:any) {
-            
-            console.log(error);
-        }
-        finally{
-            router.refresh();
-        }
+        
+        await incrementApiLimit()
     }   
         const NewMessage = messages;
         const [isSpeaking, setIsSpeaking] = useState(false);
@@ -73,8 +90,7 @@ const ConversationPage = () => {
                 setIsSpeaking(false);
               }
             }
-
-
+        
     
     return (
     <div >
@@ -88,8 +104,8 @@ const ConversationPage = () => {
       <div className="px-4 lg:px-8">
         <div>
             <Form {...form}>
-                <form 
-                onSubmit={form.handleSubmit(onSubmit)}                
+                <form
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2">
                     <FormField
                     name="prompt"
@@ -101,14 +117,20 @@ const ConversationPage = () => {
                                     disabled={isLoading}
                                     placeholder="How do I calculate the radius of circle"
                                     {...field}
+
                                 />
                             </FormControl >
                         </FormItem>
                     )}
                     />
-                    <Button className="col-span-12 lg:col-span-2 w-full" disabled={isLoading}>
-                        Generate
-                    </Button>
+                    <div className="flex">
+                        <div className="hover:cursor-pointer" onClick={() => mike()}>
+                            <Icon icon="iconoir:microphone-speaking-solid" width="40" />
+                        </div>
+                        <Button className="col-span-12 px-14 mx-3 lg:col-span-2 w-full" disabled={isLoading}>
+                            Generate
+                        </Button>
+                    </div>
                 </form>
             </Form>
         </div>
@@ -137,9 +159,7 @@ const ConversationPage = () => {
                         )}
                         >                        
                         {message.role === "user"?<UserAvatar/>:<BotAvatar/>}
-                        <p>
-                            {message.content} 
-                        </p>
+                        <p>{message.content} </p>
 
                         { message.role != "user" &&
                         <div 
@@ -151,6 +171,13 @@ const ConversationPage = () => {
                     </div>
                 ))}
             </div>
+        </div>
+      </div>
+
+      <div className="container">
+
+        <div className="main-content">
+            <p>Hello Buddy=============== {transcript}</p>
         </div>
       </div>
     </div>
