@@ -27,11 +27,17 @@ import useClipboard from "react-use-clipboard";
 import {Mike} from "@/components/mike"
 import { Icon } from '@iconify/react';
 import { Transcriptions } from "openai/resources/audio/transcriptions.mjs";
-
-import { incrementApiLimit, checkApiLimit } from "@/lib/appLimit";
+import { incrementApiLimit } from "@/lib/appLimit";
+import {checkApiLimit} from "@/lib/appLimit";
 import { NextResponse } from "next/server";
+// import userId from "@/lib/appLimit";
+import { auth } from "@clerk/nextjs";
 
-const ConversationPage = () => {
+
+export default async function ConversationPage () {
+
+  const {userId} = auth();
+  console.log("This is user Id",userId);
 
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
@@ -58,21 +64,14 @@ const ConversationPage = () => {
   
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-      
-      const freeTrial = await checkApiLimit()
-      if(!freeTrial){
-          return new NextResponse("Free Trial Has Expired",{status:403})
-      }
     
           const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
           const newMessages = [...messages, userMessage];
-          
           const response = await axios.post('/api/conversation', { messages: newMessages });
           setMessages((current) => [...current, userMessage, response.data]);
             console.log(response)
-          form.reset();
-        
-        await incrementApiLimit()
+            // await incrementApiLimit();
+          // form.reset();
     }   
         const NewMessage = messages;
         const [isSpeaking, setIsSpeaking] = useState(false);
@@ -184,6 +183,6 @@ const ConversationPage = () => {
   )     
 }
 
-export default ConversationPage;
+// export default ConversationPage;
 
 
