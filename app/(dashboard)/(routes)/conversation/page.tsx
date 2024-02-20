@@ -27,18 +27,12 @@ import useClipboard from "react-use-clipboard";
 import {Mike} from "@/components/mike"
 import { Icon } from '@iconify/react';
 import { Transcriptions } from "openai/resources/audio/transcriptions.mjs";
-import { incrementApiLimit } from "@/lib/appLimit";
-import {checkApiLimit} from "@/lib/appLimit";
 import { NextResponse } from "next/server";
-// import userId from "@/lib/appLimit";
 import { auth } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 
-
-export default async function ConversationPage () {
-
-  const {userId} = auth();
-  console.log("This is user Id",userId);
-
+const ConversationPage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     const [isListening, setIsListening] = useState(false);
@@ -65,13 +59,19 @@ export default async function ConversationPage () {
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     
-          const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
-          const newMessages = [...messages, userMessage];
-          const response = await axios.post('/api/conversation', { messages: newMessages });
-          setMessages((current) => [...current, userMessage, response.data]);
-            console.log(response)
-            // await incrementApiLimit();
-          // form.reset();
+          try {
+            const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
+            const newMessages = [...messages, userMessage];
+  
+            const response = await axios.post('/api/conversation', { messages: newMessages });
+            setMessages((current) => [...current, userMessage, response.data]);
+              console.log(response)
+            form.reset();
+          } catch (error:any) {
+              console.log(error)
+          } finally{
+            router.refresh();
+          }
     }   
         const NewMessage = messages;
         const [isSpeaking, setIsSpeaking] = useState(false);
@@ -183,6 +183,4 @@ export default async function ConversationPage () {
   )     
 }
 
-// export default ConversationPage;
-
-
+export default ConversationPage;

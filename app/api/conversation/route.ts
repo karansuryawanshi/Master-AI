@@ -3,6 +3,7 @@
 import {OpenAI} from "openai" 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 
 // const configuration = new Configuration({
 //     apiKey: process.env.OPENAI_API_KEY,
@@ -24,7 +25,8 @@ const instructionMessage= {
   ) 
   {
     // try {
-    //   const { userId } = auth();
+      const { userId } = auth();
+      // console.log("User Id id--------",userId)
       const body = await req.json();
       const { messages  } = body;
       
@@ -39,11 +41,18 @@ const instructionMessage= {
       // if (!messages) {
       //   return new NextResponse("Messages are required", { status: 400 });
       // }
+
+      const freeTrial = await checkApiLimit();
+
+      if (!freeTrial){
+        return new NextResponse("Free trail has expired",{status:403});
+      }
+
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages :[instructionMessage, ...messages]
       });
-
+      await incrementApiLimit();
       // console.log('Response here;', response.choices[0].message)
   
       return NextResponse.json(response.choices[0].message);
