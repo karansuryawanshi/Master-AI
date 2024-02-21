@@ -4,6 +4,8 @@ import {OpenAI} from "openai"
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate"
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!, 
@@ -42,6 +44,12 @@ const replicate = new Replicate({
       //   messages :[instructionMessage, ...messages]
       // });
 
+      const freeTrial = await checkApiLimit();
+
+      if (!freeTrial){
+        return new NextResponse("Free trail has expired",{status:403});
+      }
+
       const response = await replicate.run(
         "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
         {
@@ -55,6 +63,8 @@ const replicate = new Replicate({
           }
         }
       );
+      await incrementApiLimit();
+
       // console.log(output);
 
       // console.log('Response here;', response.choices[0].message)

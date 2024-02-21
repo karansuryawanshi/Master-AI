@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import {ArrowRight, MessageSquare,Music,Image, VideoIcon,Code} from "lucide-react"
 import {cn} from "@/lib/utils"
 import {useRouter} from "next/navigation"
+
 const tools = [
   {
     label:"Conversation",
@@ -30,7 +31,7 @@ const tools = [
     icon :  VideoIcon,
     color: "text-orange-700",
     bgColor: "bg-orange-700/10",
-    href : "/image"
+    href : "/video"
   },
   {
     label:"Code Generation",

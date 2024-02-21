@@ -39,10 +39,10 @@ export const checkApiLimit = async () => {
 
   // console.log("count of user Api limit",userApiLimit.count)
 
-  if (userApiLimit.count > 5) {
-    return false;
-  } else {
+  if (userApiLimit.count < 5) {
     return true;
+  } else {
+    return false;
   }
 };
 

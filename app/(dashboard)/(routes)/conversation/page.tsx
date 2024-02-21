@@ -31,8 +31,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+import { useProModel } from "@/hooks/use-pro-model";
 
 const ConversationPage = () => {
+    const proModel = useProModel()
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
     const [isListening, setIsListening] = useState(false);
@@ -68,7 +70,9 @@ const ConversationPage = () => {
               console.log(response)
             form.reset();
           } catch (error:any) {
-              console.log(error)
+            if(error?.response?.status === 403){
+              proModel.onOpen();
+            }
           } finally{
             router.refresh();
           }

@@ -4,6 +4,8 @@ import {OpenAI} from "openai"
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import {OpenAIApi} from "openai";
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+
 
 const openAIApi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
@@ -38,13 +40,18 @@ const instructionMessage= {
       //   model: "gpt-3.5-turbo",
       //   messages
       // });
+      const freeTrial = await checkApiLimit();
+
+      if (!freeTrial){
+        return new NextResponse("Free trail has expired",{status:403});
+      }
       const response = await openAIApi.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages :[instructionMessage, ...messages]
         // messages: [{ role: "system",
         //    content: "you are a code generator. you must answer only in markdown code snippets. use code comments for explanations." }],
-        
       });
+      await incrementApiLimit();
       // console.log("Response is ===>",response)
 
       // console.log('Response here;      ', response.choices[0].message)

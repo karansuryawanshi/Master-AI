@@ -4,6 +4,8 @@ import {OpenAI} from "openai"
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate"
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!, 
@@ -42,6 +44,13 @@ const replicate = new Replicate({
       //   messages :[instructionMessage, ...messages]
       // });
 
+
+      const freeTrial = await checkApiLimit();
+
+      if (!freeTrial){
+        return new NextResponse("Free trail has expired",{status:403});
+      }
+      
       const response = await replicate.run(
         "anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351",
         {
@@ -53,7 +62,8 @@ const replicate = new Replicate({
       // console.log(output);
 
       // console.log('Response here;', response.choices[0].message)
-  
+      await incrementApiLimit();
+        
       return NextResponse.json(response);
     }
     // catch (error) {

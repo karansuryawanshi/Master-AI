@@ -1,5 +1,7 @@
 import {OpenAI} from "openai" 
 import { NextResponse } from "next/server";
+import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
@@ -16,11 +18,18 @@ const openai = new OpenAI({
   {
       const body = await req.json();
       const { prompt, amount = 1, resolution = "512x512" } = body;
+
+      const freeTrial = await checkApiLimit();
+      if (!freeTrial){
+        return new NextResponse("Free trail has expired",{status:403});
+      }
+
       const response = await openai.images.generate({
         prompt,
         n: parseInt(amount, 10),
         size: resolution,
       });
+      await incrementApiLimit();
       return NextResponse.json(response.data);
     }
 

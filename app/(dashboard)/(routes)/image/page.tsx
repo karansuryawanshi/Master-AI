@@ -18,8 +18,12 @@ import { Loader } from "@/components/loader";
 import { EmptyImage } from "@/components/emptyImage";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
+import { useProModel } from "@/hooks/use-pro-model";
+
 
 const PhotoPage = () => {
+
+const proModel = useProModel()
 const router = useRouter();
     const [images , setImages] =useState<string[]>([])
 
@@ -45,8 +49,9 @@ const router = useRouter();
           form.reset();
         } 
         catch (error:any) {
-            
-            console.log(error);
+          if(error?.response?.status === 403){
+            proModel.onOpen();
+          }
         }
         finally{
             router.refresh();
