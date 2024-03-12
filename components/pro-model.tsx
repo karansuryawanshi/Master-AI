@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dialog,DialogContent,DialogDescription,DialogHeader, DialogTitle,DialogFooter } from './ui/dialog'
 import { useProModel } from '@/hooks/use-pro-model'
 import { Badge } from "@/components/ui/badge"
-import {ArrowRight, MessageSquare,Music,Image, VideoIcon,Code,Check,Zap} from "lucide-react"
+import {ArrowRight, MessageSquare,Music,Image, VideoIcon,Code,Check,Zap, Axis3D} from "lucide-react"
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 import { cn } from '@/lib/utils'
 import { colors } from '@mui/material'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const tools = [
     {
@@ -45,6 +47,21 @@ const tools = [
 const ProModel = () => {
 
     const proModal = useProModel()
+    const [loading, setLoading] = useState(false)
+
+    const onSubscribe = async ()=>{
+      try {
+        setLoading(true)
+        const resposne = await axios.get("/api/stripe")
+        window.location.href = resposne.data.url;
+
+      } catch (error) {
+        // console.log(error,"STRIPE_CLIENT_ERROR")
+        toast.error("Something went wrong")
+      } finally{
+        setLoading(false)
+      }
+    }
 
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
@@ -58,7 +75,7 @@ const ProModel = () => {
                 </DialogTitle>
                 <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
                     {tools.map((tool) => (
-                    <Card key={tool.href} className="p-3 border-black/5 flex items-center justify-between">
+                    <Card key={tool.label} className="p-3 border-black/5 flex items-center justify-between">
                         <div className="flex items-center gap-x-4">
                         <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
                             <tool.icon className={cn("w-6 h-6", tool.color)} />
@@ -74,6 +91,8 @@ const ProModel = () => {
             </DialogHeader>
             <DialogFooter>
                 <Button 
+                    disabled={loading}
+                    onClick={onSubscribe}
                     className='w-full'
                     size="lg"
                     variant="premium"

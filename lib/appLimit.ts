@@ -26,6 +26,7 @@ export const incrementApiLimit = async () => {
   }
 };
 
+
 export const checkApiLimit = async () => {
   const { userId } = auth();
 
@@ -37,14 +38,13 @@ export const checkApiLimit = async () => {
     where: { userId: userId },
   });
 
-  // console.log("count of user Api limit",userApiLimit.count)
-
-  if (userApiLimit.count < 5) {
+  if (!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) {
     return true;
   } else {
     return false;
   }
 };
+
 
 export const getApiLimitCount = async () => {
   const { userId } = auth();

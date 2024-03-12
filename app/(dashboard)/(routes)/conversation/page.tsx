@@ -32,6 +32,7 @@ import { auth } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 const ConversationPage = () => {
     const proModel = useProModel()
@@ -72,6 +73,9 @@ const ConversationPage = () => {
           } catch (error:any) {
             if(error?.response?.status === 403){
               proModel.onOpen();
+            }
+            else{
+              toast.error("Something went wrong.")
             }
           } finally{
             router.refresh();

@@ -19,6 +19,7 @@ import { EmptyImage } from "@/components/emptyImage";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 
 const PhotoPage = () => {
@@ -51,6 +52,9 @@ const router = useRouter();
         catch (error:any) {
           if(error?.response?.status === 403){
             proModel.onOpen();
+          }
+          else{
+            toast.error("Something went wrong.")
           }
         }
         finally{

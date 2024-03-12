@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate"
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+import { checkSubscription } from "@/lib/subscription";
 
 
 const replicate = new Replicate({
@@ -45,8 +46,9 @@ const replicate = new Replicate({
       // });
 
       const freeTrial = await checkApiLimit();
+      const isPro = await checkSubscription();
 
-      if (!freeTrial){
+      if (!freeTrial && !isPro){
         return new NextResponse("Free trail has expired",{status:403});
       }
 
@@ -63,7 +65,10 @@ const replicate = new Replicate({
           }
         }
       );
-      await incrementApiLimit();
+
+      if(!isPro){
+        await incrementApiLimit();
+      }
 
       // console.log(output);
 

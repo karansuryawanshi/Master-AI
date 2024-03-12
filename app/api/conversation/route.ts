@@ -4,6 +4,7 @@ import {OpenAI} from "openai"
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
+import { checkSubscription } from "@/lib/subscription";
 
 // const configuration = new Configuration({
 //     apiKey: process.env.OPENAI_API_KEY,
@@ -43,8 +44,9 @@ const instructionMessage= {
       // }
 
         const freeTrial = await checkApiLimit();
+        const isPro = await checkSubscription();
 
-        if (!freeTrial){
+        if (!freeTrial && !isPro){
           return new NextResponse("Free trail has expired",{status:403});
         }
 
@@ -52,7 +54,11 @@ const instructionMessage= {
         model: 'gpt-3.5-turbo',
         messages :[instructionMessage, ...messages]
       });
-      await incrementApiLimit();
+
+      if(!isPro){
+        await incrementApiLimit()
+      }
+      // await incrementApiLimit();
       // console.log('Response here;', response.choices[0].message)
   
       return NextResponse.json(response.choices[0].message);

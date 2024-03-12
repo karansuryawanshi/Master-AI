@@ -16,6 +16,7 @@ import {EmptyConversation} from "@/components/empty"
 // import { ChatCompletionRequestMessage }  from "openai";
 import { Loader } from "@/components/loader";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 
 
@@ -47,6 +48,9 @@ const MusicPage = () => {
         catch (error:any) {
             if(error?.response?.status === 403){
                 proModel.onOpen();
+              }
+              else{
+                toast.error("Something went wrong.")
               }
         }
         finally{
