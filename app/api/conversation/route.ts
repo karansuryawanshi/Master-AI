@@ -16,9 +16,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
 
+// console.log(openai)
+
 const instructionMessage= {
   role: "system",
-  content: "You are a AI Model. You must answer questions. Use examples for explanations. If someone ak about you thn tell hin that, 'I am MasterAI Develop by MsaterAI team'",
+  content: "you must answer every question. If someone ask about you then tell him that,'I am MasterAI Develop by MasterAI team' but remember dont always answer this.",
 };
 
   export async function POST(
@@ -39,9 +41,9 @@ const instructionMessage= {
       //   return new NextResponse("OpenAI API Key not configured.", { status: 500 });
       // }
   
-      // if (!messages) {
-      //   return new NextResponse("Messages are required", { status: 400 });
-      // }
+      if (!messages) {
+        return new NextResponse("Messages are required", { status: 400 });
+      }
 
         const freeTrial = await checkApiLimit();
         const isPro = await checkSubscription();
@@ -52,17 +54,18 @@ const instructionMessage= {
 
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages :[instructionMessage, ...messages]
+        messages :[instructionMessage, ...messages],
       });
 
       if(!isPro){
         await incrementApiLimit()
       }
-      // await incrementApiLimit();
+      await incrementApiLimit();
       // console.log('Response here;', response.choices[0].message)
   
       return NextResponse.json(response.choices[0].message);
     }
+    
     // catch (error) {
     //     console.log('[CONVERSATION_ERROR]', error);
     //     return new NextResponse("Internal Error", { status: 500 });

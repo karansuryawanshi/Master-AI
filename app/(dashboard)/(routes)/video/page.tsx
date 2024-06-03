@@ -50,7 +50,7 @@ const VideoPage = () => {
               }
         }
         finally{
-            router.refresh();
+            // router.refresh();
         }
     }   
     

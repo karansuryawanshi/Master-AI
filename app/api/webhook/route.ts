@@ -6,6 +6,8 @@ import prismadb from "@/lib/prismadb"
 import { stripe } from "@/lib/stripe"
 
 export async function POST(req: Request) {
+  console.log('Got request')
+
   const body = await req.text()
   const signature = headers().get("Stripe-Signature") as string
 

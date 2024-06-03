@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
+import axios from "axios";
 
 const settingUrl = absoluteUrl("/settings")
 
@@ -10,6 +11,7 @@ export async function GET(){
     try {
 
         const {userId} = auth();
+
         const user = await currentUser();
 
         if(!userId || !user){
@@ -22,11 +24,16 @@ export async function GET(){
             }
         })
 
+        console.log(userSubscription)
+
         if(userSubscription && userSubscription.stripeCustomerId){
             const stripeSession = await stripe.billingPortal.sessions.create({
                 customer:userSubscription.stripeCustomerId,
                 return_url:settingUrl,
             })
+
+            console.log('Hello')
+            console.log(stripeSession)
             return new NextResponse(JSON.stringify({url:stripeSession.url}))
         }
 
@@ -57,6 +64,7 @@ export async function GET(){
                 userId,
             }
         })
+
         return new NextResponse(JSON.stringify({url:stripeSession.url}))
     } catch (error) {
         console.log("[STRIPE_ERROR]",error)

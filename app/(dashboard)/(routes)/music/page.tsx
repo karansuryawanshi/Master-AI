@@ -54,7 +54,7 @@ const MusicPage = () => {
               }
         }
         finally{
-            router.refresh();
+            // router.refresh();
         }
     }   
     

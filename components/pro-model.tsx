@@ -53,7 +53,11 @@ const ProModel = () => {
       try {
         setLoading(true)
         const resposne = await axios.get("/api/stripe")
+        
+        // const res = await axios.post("/api/webhook", resposne)
         window.location.href = resposne.data.url;
+
+        // console.log("link",window.location.href)
 
       } catch (error) {
         // console.log(error,"STRIPE_CLIENT_ERROR")
@@ -99,7 +103,6 @@ const ProModel = () => {
                     >
                     Upgrade
                     <Zap className='w-4 h-4 ml-4 fill-white'>
-
                     </Zap>
                 </Button>
             </DialogFooter>
