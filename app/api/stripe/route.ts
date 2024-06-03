@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
+import axios from "axios";
 
 const settingUrl = absoluteUrl("/settings")
 
@@ -11,6 +12,9 @@ export async function GET(){
 
         const {userId} = auth();
         const user = await currentUser();
+
+        // console.log("user is present",user)
+        // console.log("userID is present",userId)
 
         if(!userId || !user){
             return new NextResponse("unauthorised",{status:401})
@@ -21,12 +25,17 @@ export async function GET(){
                 userId
             }
         })
+        // console.log("Subscription",userId)
+        // console.log("UserSubscription",userSubscription)
 
         if(userSubscription && userSubscription.stripeCustomerId){
             const stripeSession = await stripe.billingPortal.sessions.create({
                 customer:userSubscription.stripeCustomerId,
                 return_url:settingUrl,
             })
+
+            console.log('Hello')
+            console.log(stripeSession)
             return new NextResponse(JSON.stringify({url:stripeSession.url}))
         }
 
@@ -57,6 +66,9 @@ export async function GET(){
                 userId,
             }
         })
+
+        console.log("stripeSession",stripeSession)
+
         return new NextResponse(JSON.stringify({url:stripeSession.url}))
     } catch (error) {
         console.log("[STRIPE_ERROR]",error)

@@ -44,7 +44,7 @@ const router = useRouter();
       try {
           setImages ([]);
           console.log(values)
-          const response = await axios.post('/api/image', values);
+          const response = await axios.post('/api/image', values); 
           const urls = response.data.map((images: { url: string }) => images.url );
           setImages(urls);
           form.reset();
@@ -186,12 +186,11 @@ const router = useRouter();
             className="rounded-lg overflow-hidden"
             >
                 <div className="relative aspect-square">
-                    <img
+                    {/* <img
                     alt="Image"
-                    // fill
-                    src={EmptyImage}
-                    // src={src}
-                    />
+                    src={Image}
+                    /> */}
+                    <img src={images} alt={images} />
 
               <CardFooter className="p-2">
                 <Button onClick={() => window.open(src)} variant="secondary" className="w-full">

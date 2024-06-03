@@ -78,7 +78,7 @@ const ConversationPage = () => {
               toast.error("Something went wrong.")
             }
           } finally{
-            router.refresh();
+            // router.refresh();
           }
     }   
         const NewMessage = messages;
@@ -181,12 +181,12 @@ const ConversationPage = () => {
         </div>
       </div>
 
-      <div className="container">
+      {/* <div className="container">
 
         <div className="main-content">
             <p>Hello Buddy=============== {transcript}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   )     
 }
