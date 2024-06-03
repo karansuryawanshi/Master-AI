@@ -29,6 +29,13 @@ Master AI is an innovative application that combines cutting-edge technologies t
 - How to reuse layouts
 - Folder structure in Next 13 App Router
 
+## Screenshot
+
+![Screenshot (420)](https://github.com/karansuryawanshi/Mobile_Shopee/assets/98444090/9746054c-32af-41be-85fc-f933f6fbbe79)
+![Screenshot (424)](https://github.com/karansuryawanshi/Mobile_Shopee/assets/98444090/0aa097ea-d97c-41ec-9369-120446d26818)
+![Screenshot (423)](https://github.com/karansuryawanshi/Mobile_Shopee/assets/98444090/4cdf6496-7a53-4247-b6e3-676a5e85fa22)
+![Screenshot (422)](https://github.com/karansuryawanshi/Mobile_Shopee/assets/98444090/8f72de50-dae1-4a39-a9ab-a53df246dcf9)
+
 
 ## Technologies Used
 
