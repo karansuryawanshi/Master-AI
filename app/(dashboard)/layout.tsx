@@ -15,7 +15,7 @@ const dashboardLayout = async ({
 
   return (
     
-    <div className="h-full relative">
+    <div className="h-full relative bg-custom-pink">
         <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:insert-y-0 "> 
             <Sidebar isPro={isPro} apiLimitCount = {apiLimitCount}/>
         </div>  
