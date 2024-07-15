@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {EmptyConversation} from "@/components/empty"
-import { ChatCompletionRequestMessage }  from "openai";
-// import ChatCompletionRequestMessage from "openai"
+// import { ChatCompletionRequestMessage }  from "openai";
+import ChatCompletionRequestMessage from "openai"
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
