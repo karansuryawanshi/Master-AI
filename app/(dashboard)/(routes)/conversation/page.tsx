@@ -13,24 +13,16 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {EmptyConversation} from "@/components/empty"
-import { ChatCompletionRequestMessage }  from "openai";
+// import { ChatCompletionRequestMessage }  from "openai";
+import ChatCompletionRequestMessage from "openai"
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import VolumeUpSharpIcon from '@mui/icons-material/VolumeUpSharp';
 import 'regenerator-runtime/runtime';
-import SpeechRecognition, {
-    useSpeechRecognition,
-  } from "react-speech-recognition";
-import useClipboard from "react-use-clipboard";
-import {Mike} from "@/components/mike"
+import SpeechRecognition from "react-speech-recognition";
 import { Icon } from '@iconify/react';
-import { Transcriptions } from "openai/resources/audio/transcriptions.mjs";
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
-import { useEffect } from "react";
-import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
 
@@ -50,7 +42,6 @@ const ConversationPage = () => {
             setIsListening(false);
           }
         }
-    const { transcript, stopSpeechRecognition, listening } = useSpeechRecognition();
 
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,7 +59,6 @@ const ConversationPage = () => {
   
             const response = await axios.post('/api/conversation', { messages: newMessages });
             setMessages((current) => [...current, userMessage, response.data]);
-              // console.log(response)
             form.reset();
           } catch (error:any) {
             if(error?.response?.status === 403){
@@ -77,9 +67,7 @@ const ConversationPage = () => {
             else{
               toast.error("Something went wrong.")
             }
-          } finally{
-            // router.refresh();
-          }
+          } 
     }   
         const NewMessage = messages;
         const [isSpeaking, setIsSpeaking] = useState(false);
@@ -97,8 +85,6 @@ const ConversationPage = () => {
                 setIsSpeaking(false);
               }
             }
-        
-    
     return (
     <div >
       <Heading
@@ -141,7 +127,6 @@ const ConversationPage = () => {
                 </form>
             </Form>
         </div>
-        
         <div className="space-y-4 mt-4">
             {isLoading &&(
                 <div className="p-8 rounded-lg w-full flex item-center justify-center bg-muted">
@@ -180,13 +165,6 @@ const ConversationPage = () => {
             </div>
         </div>
       </div>
-
-      {/* <div className="container">
-
-        <div className="main-content">
-            <p>Hello Buddy=============== {transcript}</p>
-        </div>
-      </div> */}
     </div>
   )     
 }

@@ -10,7 +10,6 @@ import { toast } from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/navigation";
 import { ChatCompletionRequestMessage } from "openai";
-
 import { BotAvatar } from "@/components/bot-avatar";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,6 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/loader";
 import { UserAvatar } from "@/components/user-avatar";
-// import { Empty } from "@/components/ui/empty";
 import { useProModel } from "@/hooks/use-pro-model";
 
 import { formSchema } from "./constants";
@@ -55,7 +53,6 @@ const CodePage = () => {
         toast.error("Something went wrong.");
       }
     } finally {
-      // router.refresh();
     }
   }
 
@@ -114,9 +111,6 @@ const CodePage = () => {
               <Loader />
             </div>
           )}
-          {/* {messages.length === 0 && !isLoading && (
-            // <Empty label="No conversation started." />
-          )} */}
           <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message) => (
               <div 
