@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       session.subscription as string
     )
 
+    console.log("session?.metadata?.userId",session?.metadata?.userId)
     if (!session?.metadata?.userId) {
       return new NextResponse("User id is required", { status: 400 });
     }
@@ -46,7 +47,6 @@ export async function POST(req: Request) {
       },
     })
   }
-
   if (event.type === "invoice.payment_succeeded") {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string

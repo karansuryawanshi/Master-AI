@@ -43,8 +43,8 @@ const router = useRouter();
       
       try {
           setImages ([]);
-          // console.log(values)
-          const response = await axios.post('/api/image', values); 
+          console.log(values)
+          const response = await axios.post('/api/image', values);
           const urls = response.data.map((images: { url: string }) => images.url );
           setImages(urls);
           form.reset();

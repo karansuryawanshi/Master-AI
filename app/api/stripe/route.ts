@@ -14,6 +14,9 @@ export async function GET(){
 
         const user = await currentUser();
 
+        // console.log("user is present",user)
+        // console.log("userID is present",userId)
+
         if(!userId || !user){
             return new NextResponse("unauthorised",{status:401})
         }
@@ -23,8 +26,6 @@ export async function GET(){
                 userId
             }
         })
-
-        console.log(userSubscription)
 
         if(userSubscription && userSubscription.stripeCustomerId){
             const stripeSession = await stripe.billingPortal.sessions.create({
@@ -64,7 +65,6 @@ export async function GET(){
                 userId,
             }
         })
-
         return new NextResponse(JSON.stringify({url:stripeSession.url}))
     } catch (error) {
         console.log("[STRIPE_ERROR]",error)
