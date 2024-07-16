@@ -8,7 +8,7 @@ import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
 const openAIApi = new OpenAI({
-  apiKey:"sk-proj-N4D0CZlQYfgmyfeptOstT3BlbkFJhg7eKSvNzsX76zZZ5ukT", 
+  apiKey: process.env.OPENAI_API_KEY, 
 
 });
  
