@@ -8,7 +8,7 @@ import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
 const openAIApi = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, 
+  apiKey:"sk-proj-N4D0CZlQYfgmyfeptOstT3BlbkFJhg7eKSvNzsX76zZZ5ukT", 
 
 });
  
@@ -48,9 +48,9 @@ const instructionMessage= {
         return new NextResponse("Free trail has expired",{status:403});
       }
 
-      if (!process.env.OPENAI_API_KEY) {
-        return new NextResponse("OpenAI API Key not configured.", { status: 500 });
-      }
+      // if (!process.env.OPENAI_API_KEY) {
+      //   return new NextResponse("OpenAI API Key not configured.", { status: 500 });
+      // }
 
       const response = await openAIApi.chat.completions.create({
         model: 'gpt-3.5-turbo',
