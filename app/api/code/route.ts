@@ -3,7 +3,7 @@
 import {OpenAI} from "openai" 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import {OpenAIApi} from "openai";
+// import {OpenAIApi} from "openai";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
