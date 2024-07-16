@@ -13,13 +13,18 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EmptyConversation } from "@/components/empty";
-import ChatCompletionRequestMessage from "openai";
 import { Loader } from "@/components/loader";
 import 'regenerator-runtime/runtime';
 import SpeechRecognition from "react-speech-recognition";
 import { Icon } from '@iconify/react';
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
+
+// Define the ChatCompletionRequestMessage type inline
+type ChatCompletionRequestMessage = {
+  role: "user" | "assistant" | "system";
+  content: string;
+};
 
 const ConversationPage = () => {
     const proModel = useProModel();
@@ -87,7 +92,7 @@ const ConversationPage = () => {
                 icon={MessageSquare}
                 iconColor="text-violet-500"
                 bgColor="bg-violet-500/10"
-            ></Heading>
+            />
             <div className="px-4 lg:px-8">
                 <div>
                     <Form {...form}>
@@ -103,7 +108,7 @@ const ConversationPage = () => {
                                             <Input
                                                 className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                                 disabled={isLoading}
-                                                placeholder="How do I calculate the radius of circle"
+                                                placeholder="How do I calculate the radius of a circle"
                                                 {...field}
                                             />
                                         </FormControl>
