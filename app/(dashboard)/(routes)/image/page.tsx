@@ -188,10 +188,10 @@ const router = useRouter();
             >
                 <div className="relative aspect-square">
                     {/* <img
+                    src={Image[0]}
                     alt="Image"
-                    src={Image}
                     /> */}
-                    <img src={images} alt={images} />
+                    <img src={images[0]} alt={images[0]} />
 
               <CardFooter className="p-2">
                 <Button onClick={() => window.open(src)} variant="secondary" className="w-full">
