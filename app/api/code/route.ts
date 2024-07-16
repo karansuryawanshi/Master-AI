@@ -7,10 +7,6 @@ import { NextResponse } from "next/server";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("The OPENAI_API_KEY environment variable is missing or empty.");
-}
-
 const openAIApi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 
@@ -50,6 +46,10 @@ const instructionMessage= {
 
       if (!freeTrial && !isPro){
         return new NextResponse("Free trail has expired",{status:403});
+      }
+
+      if (!process.env.OPENAI_API_KEY) {
+        return new NextResponse("OpenAI API Key not configured.", { status: 500 });
       }
 
       const response = await openAIApi.chat.completions.create({
