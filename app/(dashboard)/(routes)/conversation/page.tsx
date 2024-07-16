@@ -1,11 +1,3 @@
-// src/types/react-speech-recognition.d.ts
-
-declare module 'react-speech-recognition' {
-  const content: any;
-  export default content;
-}
-
-// Your existing component file
 "use client";
 
 import axios from "axios";
@@ -21,13 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EmptyConversation } from "@/components/empty";
-// import { ChatCompletionRequestMessage } from "openai";
 import ChatCompletionRequestMessage from "openai";
 import { Loader } from "@/components/loader";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
-import VolumeUpSharpIcon from '@mui/icons-material/VolumeUpSharp';
 import 'regenerator-runtime/runtime';
 import SpeechRecognition from "react-speech-recognition";
 import { Icon } from '@iconify/react';
@@ -145,28 +132,6 @@ const ConversationPage = () => {
                             <EmptyConversation label="No Conversation started" />
                         </div>
                     )}
-                    <div className="flex flex-col-reverse gap-y-4">
-                        {messages.map((message, index, values) => (
-                            <div
-                                key={message.content}
-                                className={cn(
-                                    "p-8 w-full flex item-start gap-x-8 rounded-lg",
-                                    message.role === "user" ? "bg-white border border-black/10" : "bg-muted"
-                                )}
-                            >
-                                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                                <p>{message.content}</p>
-
-                                {message.role !== "user" && (
-                                    <div
-                                        className="flex flex-end justify-end p-2 m-auto rounded-full lg:text-5xl bg-opacity-0 text-black-500 cursor-pointer duration-300 hover:opacity-70 bg-[#c8e5ff] bg-opacity-50 transition-opacity"
-                                    >
-                                        <VolumeUpSharpIcon onClick={() => speak(message.content)} />
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
                 </div>
             </div>
         </div>
