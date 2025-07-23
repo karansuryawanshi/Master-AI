@@ -1,0 +1,29 @@
+<svg width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <!-- Smooth Magenta Gradient with fade -->
+    <linearGradient id="magentaGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="magenta" stop-opacity="1">
+        <animate attributeName="offset" values="0%;1;0%" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="30%" stop-color="magenta" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="magenta" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circle with thin, fading magenta stroke -->
+  <circle cx="150" cy="150" r="140"
+          fill="none"
+          stroke="url(#magentaGradient)"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-dasharray="879"
+          stroke-dashoffset="0"
+          transform="rotate(-90 150 150)">
+    <animateTransform attributeName="transform"
+                      type="rotate"
+                      from="0 150 150"
+                      to="360 150 150"
+                      dur="6s"
+                      repeatCount="indefinite" />
+  </circle>
+</svg>

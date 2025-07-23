@@ -1,0 +1,29 @@
+<svg width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <!-- Animated Gradient -->
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00BFFF">
+        <animate attributeName="offset" values="0%;100%" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#00BFFF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circle Path -->
+  <circle cx="150" cy="150" r="140"
+          fill="none"
+          stroke="url(#grad)"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-dasharray="879"
+          stroke-dashoffset="0"
+          transform="rotate(-90 150 150)">
+    <!-- Rotate the entire circle stroke -->
+    <animateTransform attributeName="transform"
+                      type="rotate"
+                      from="0 150 150"
+                      to="360 150 150"
+                      dur="6s"
+                      repeatCount="indefinite" />
+  </circle>
+</svg>

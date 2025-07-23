@@ -3,13 +3,13 @@
 import {OpenAI} from "openai" 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-// import {OpenAIApi} from "openai";
+import {OpenAIApi} from "openai";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
+
 const openAIApi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
-
 });
  
 const instructionMessage= {
@@ -47,10 +47,6 @@ const instructionMessage= {
       if (!freeTrial && !isPro){
         return new NextResponse("Free trail has expired",{status:403});
       }
-
-      // if (!process.env.OPENAI_API_KEY) {
-      //   return new NextResponse("OpenAI API Key not configured.", { status: 500 });
-      // }
 
       const response = await openAIApi.chat.completions.create({
         model: 'gpt-3.5-turbo',

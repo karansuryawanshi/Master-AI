@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { incrementApiLimit,checkApiLimit } from "@/lib/appLimit";
 import { checkSubscription } from "@/lib/subscription";
 
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
@@ -25,10 +26,6 @@ const openai = new OpenAI({
       if (!freeTrial && !isPro){
         return new NextResponse("Free trail has expired",{status:403});
       }
-
-      // if (!process.env.OPENAI_API_KEY) {
-      //   return new NextResponse("OpenAI API Key not configured.", { status: 500 });
-      // }
 
       const response = await openai.images.generate({
         prompt,
