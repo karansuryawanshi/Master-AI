@@ -96,7 +96,7 @@ export const AiDetails: React.FC<AiDetailsProps> = ({ onScrollThreshold }) => {
         </div>
         <div className="flex items-center justify-center w-screen h-screen overflow-hidden">
           <img
-            className="w-[96rem] h-[45rem]"
+            className="w-full h-full"
             src="/rectangle_image.png"
             alt="transparent image"
           />
@@ -115,7 +115,7 @@ export const AiDetails: React.FC<AiDetailsProps> = ({ onScrollThreshold }) => {
                 to learn grammar, context, and semantics, enabling it to produce
                 coherent and contextually relevant responses. A common use case
                 is content creation—such as in Master AI, where users can input
-                prompts like "Write a blog on AI," and the model generates
+                prompts like Write a blog on AI, and the model generates
                 complete, high-quality content automatically.
               </p>
             </div>
